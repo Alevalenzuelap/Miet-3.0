@@ -58,7 +58,14 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .ir-mapa-btn {
+        .selected-location {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .planificar-btn {
             background-color: #007bff;
             color: white;
             border: none;
@@ -68,8 +75,9 @@
             width: 100%;
             margin-top: 15px;
             transition: background-color 0.3s ease;
+            display: none;
         }
-        .ir-mapa-btn:hover {
+        .planificar-btn:hover {
             background-color: #0056b3;
         }
     </style>
@@ -88,30 +96,39 @@
         <div id="inicioViaje" style="display:none; margin-top: 15px;">
             <div class="form-group">
                 <label>Selecciona Inicio del Viaje</label>
-                <select id="inicioSelect" class="form-control">
+                <select id="inicioSelect" class="form-control" onchange="seleccionarInicio()">
                     <option value="">Seleccionar</option>
                     <option value="ubicacion">Mi Ubicación Actual</option>
                     <option value="manual">Ingresar Dirección</option>
                 </select>
             </div>
             <div id="direccionInicio" style="display:none; margin-top: 10px;">
-                <input type="text" placeholder="Ingresa dirección de inicio" class="form-control">
+                <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" class="form-control" onchange="seleccionarInicio()">
+            </div>
+            <div id="inicioSeleccionado" class="selected-location">
+                Inicio: <span id="textoInicio"></span>
             </div>
         </div>
 
         <div id="destinoViaje" style="display:none; margin-top: 15px;">
             <div class="form-group">
                 <label>Ingresa Destino del Viaje</label>
-                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control">
+                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()">
+            </div>
+            <div id="destinoSeleccionado" class="selected-location">
+                Destino: <span id="textoDestino"></span>
             </div>
         </div>
 
-        <button class="ir-mapa-btn" onclick="irAlMapa()">
-            Ir al Mapa
+        <button id="planificarBtn" class="planificar-btn" onclick="planificarViaje()">
+            Planificar Viaje
         </button>
     </div>
 
     <script>
+        let inicioSeleccionado = false;
+        let destinoSeleccionado = false;
+
         function mostrarOpcionesInicio() {
             const inicioViaje = document.getElementById('inicioViaje');
             const destinoViaje = document.getElementById('destinoViaje');
@@ -134,10 +151,51 @@
             destinoViaje.style.display = 'block';
         }
 
-        function irAlMapa() {
-            // Aquí puedes agregar la lógica para redirigir al mapa
-            // Por ejemplo:
-            window.location.href = 'mapa.html';
+        function seleccionarInicio() {
+            const inicioSelect = document.getElementById('inicioSelect');
+            const inicioManual = document.getElementById('inicioManual');
+            const inicioSeleccionado = document.getElementById('inicioSeleccionado');
+            const textoInicio = document.getElementById('textoInicio');
+            
+            let ubicacion = '';
+            if (inicioSelect.value === 'ubicacion') {
+                ubicacion = 'Ubicación Actual';
+            } else if (inicioSelect.value === 'manual') {
+                ubicacion = inicioManual.value;
+            }
+
+            if (ubicacion) {
+                textoInicio.textContent = ubicacion;
+                inicioSeleccionado.style.display = 'block';
+                this.inicioSeleccionado = true;
+                verificarPlanificacion();
+            }
+        }
+
+        function seleccionarDestino() {
+            const destinoInput = document.getElementById('destinoInput');
+            const destinoSeleccionado = document.getElementById('destinoSeleccionado');
+            const textoDestino = document.getElementById('textoDestino');
+
+            if (destinoInput.value) {
+                textoDestino.textContent = destinoInput.value;
+                destinoSeleccionado.style.display = 'block';
+                this.destinoSeleccionado = true;
+                verificarPlanificacion();
+            }
+        }
+
+        function verificarPlanificacion() {
+            const planificarBtn = document.getElementById('planificarBtn');
+            
+            if (this.inicioSeleccionado && this.destinoSeleccionado) {
+                planificarBtn.style.display = 'block';
+            }
+        }
+
+        function planificarViaje() {
+            // Redirigir a map.html
+            window.location.href = 'map.html';
         }
     </script>
 </body>
