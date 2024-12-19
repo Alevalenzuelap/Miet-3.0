@@ -10,14 +10,13 @@
             width: 100%;
         }
         .bus-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             cursor: pointer;
         }
-        .bus-red { background-color: red; }
-        .bus-yellow { background-color: yellow; }
-        .bus-green { background-color: green; }
     </style>
 </head>
 <body>
@@ -35,22 +34,35 @@
                 .bindPopup('Tu ubicación actual');
         });
 
+        // Función para crear un ícono de bus con color específico
+        function createBusIcon(color) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="40" height="40">
+                    <path fill="${color}" stroke="black" stroke-width="15" d="M488 128h-8V80c0-44.8-99.2-80-224-80S32 35.2 32 80v48h-8c-13.25 0-24 10.74-24 24v80c0 13.25 10.75 24 24 24h8v160c0 17.67 14.33 32 32 32v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h192v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h6.4c16 0 25.6-12.8 25.6-25.6V256h8c13.25 0 24-10.75 24-24v-80c0-13.26-10.75-24-24-24zM160 72c0-4.42 3.58-8 8-8h176c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H168c-4.42 0-8-3.58-8-8V72zm-48 328c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm128-112H128c-17.67 0-32-14.33-32-32v-96c0-17.67 14.33-32 32-32h112v160zm32 0V128h112c17.67 0 32 14.33 32 32v96c0 17.67-14.33 32-32 32H272zm128 112c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"/>
+                </svg>
+            `;
+            return L.divIcon({
+                className: 'bus-icon',
+                html: `<div style="width: 40px; height: 40px;">
+                        ${svg}
+                      </div>`,
+                iconSize: [40, 40]
+            });
+        }
+
         // Función para crear buses con colores aleatorios
         function createRandomBuses() {
             const buses = [
-                { color: 'red', url: 'https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg' },
-                { color: 'yellow', url: 'https://media.istockphoto.com/id/170009755/es/foto/personas-en-el-autob%C3%BAs.jpg?b=1&s=612x612&w=0&k=20&c=dn4LquRdtwn6EOXxjtISetHGQk7yw41u3lfdMLBvp78=' },
-                { color: 'green', url: 'https://youtu.be/cgs7SlZRKlg?t=75' }
+                { color: '#FF0000', url: 'https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg' }, // Rojo
+                { color: '#FFD700', url: 'https://media.istockphoto.com/id/170009755/es/foto/personas-en-el-autob%C3%BAs.jpg?b=1&s=612x612&w=0&k=20&c=dn4LquRdtwn6EOXxjtISetHGQk7yw41u3lfdMLBvp78=' }, // Amarillo
+                { color: '#008000', url: 'https://youtu.be/cgs7SlZRKlg?t=75' }  // Verde
             ];
 
             buses.forEach(bus => {
                 const lat = -36.8282 + (Math.random() - 0.5) * 0.05;
                 const lng = -73.0514 + (Math.random() - 0.5) * 0.05;
                 
-                const busIcon = L.divIcon({
-                    className: `bus-icon bus-${bus.color}`,
-                    html: `<div style="background-color: ${bus.color}; width: 100%; height: 100%;"></div>`
-                });
+                const busIcon = createBusIcon(bus.color);
 
                 L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
@@ -59,6 +71,16 @@
         }
 
         createRandomBuses();
+
+        // Función para simular movimiento de buses cada 5 segundos
+        setInterval(() => {
+            map.eachLayer((layer) => {
+                if (layer instanceof L.Marker && layer.getIcon().options.className === 'bus-icon') {
+                    map.removeLayer(layer);
+                }
+            });
+            createRandomBuses();
+        }, 5000);
     </script>
 </body>
 </html>
