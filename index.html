@@ -10,7 +10,7 @@
             height: 100%;
             font-family: Arial, sans-serif;
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://img.freepik.com/foto-gratis/autobuses-estacionados-terminal-transporte_23-2148242169.jpg');
+                        url('https://media.biobiochile.cl/wp-content/uploads/2021/03/a_uno_1186696-1.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -57,29 +57,26 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
         .location-options {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
+            flex-direction: column;
+            gap: 15px;
         }
-        .location-options button {
-            flex-grow: 1;
-            margin: 0 5px;
+        .location-btn {
+            width: 100%;
             padding: 10px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .location-btn:hover {
+            background-color: #218838;
+        }
+        #destinationInput {
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -93,41 +90,56 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>Correo Electrónico</label>
-                <input type="email" required placeholder="Ingresa tu correo">
+                <input type="email" placeholder="Ingresa tu correo" disabled>
             </div>
             <div class="form-group">
                 <label>Contraseña</label>
-                <input type="password" required placeholder="Ingresa tu contraseña">
+                <input type="password" placeholder="Ingresa tu contraseña" disabled>
             </div>
-            <button type="submit" class="btn">Iniciar Sesión</button>
         </form>
 
         <form id="registerForm" style="display:none;">
             <div class="form-group">
                 <label>Nombre Completo</label>
-                <input type="text" required placeholder="Ingresa tu nombre">
+                <input type="text" placeholder="Ingresa tu nombre" disabled>
             </div>
             <div class="form-group">
                 <label>Correo Electrónico</label>
-                <input type="email" required placeholder="Ingresa tu correo">
+                <input type="email" placeholder="Ingresa tu correo" disabled>
             </div>
             <div class="form-group">
                 <label>Contraseña</label>
-                <input type="password" required placeholder="Crea tu contraseña">
+                <input type="password" placeholder="Crea tu contraseña" disabled>
             </div>
-            <button type="submit" class="btn">Registrarse</button>
         </form>
 
         <div class="location-options">
-            <button onclick="getCurrentLocation()">Ubicación Actual</button>
-            <button onclick="showDestinationInput()">Escribir Destino</button>
+            <button class="location-btn" onclick="mostrarOpcionesInicio()">
+                Elegir Inicio del Viaje
+            </button>
+            <button class="location-btn" onclick="mostrarDestinoViaje()">
+                Elegir Destino del Viaje
+            </button>
         </div>
 
-        <div id="destinationInput" style="display:none;">
+        <div id="inicioViaje" style="display:none; margin-top: 15px;">
             <div class="form-group">
-                <label>Ingresa tu destino</label>
-                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad...">
-                <button onclick="buscarDestino()" class="btn" style="margin-top: 10px;">Buscar</button>
+                <label>Selecciona Inicio del Viaje</label>
+                <select id="inicioSelect" class="form-control">
+                    <option value="">Seleccionar</option>
+                    <option value="ubicacion">Mi Ubicación Actual</option>
+                    <option value="manual">Ingresar Dirección</option>
+                </select>
+            </div>
+            <div id="direccionInicio" style="display:none; margin-top: 10px;">
+                <input type="text" placeholder="Ingresa dirección de inicio" class="form-control">
+            </div>
+        </div>
+
+        <div id="destinoViaje" style="display:none; margin-top: 15px;">
+            <div class="form-group">
+                <label>Ingresa Destino del Viaje</label>
+                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control">
             </div>
         </div>
     </div>
@@ -147,34 +159,26 @@
             document.getElementById('loginTab').classList.remove('active');
         }
 
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        alert(`Latitud: ${position.coords.latitude}, Longitud: ${position.coords.longitude}`);
-                        // Aquí podrías redirigir al mapa con estas coordenadas
-                    },
-                    (error) => {
-                        alert('Error al obtener la ubicación: ' + error.message);
-                    }
-                );
-            } else {
-                alert('Geolocalización no soportada por este navegador.');
-            }
+        function mostrarOpcionesInicio() {
+            const inicioViaje = document.getElementById('inicioViaje');
+            const destinoViaje = document.getElementById('destinoViaje');
+            
+            inicioViaje.style.display = 'block';
+            destinoViaje.style.display = 'none';
+
+            const inicioSelect = document.getElementById('inicioSelect');
+            inicioSelect.addEventListener('change', function() {
+                const direccionInicio = document.getElementById('direccionInicio');
+                direccionInicio.style.display = this.value === 'manual' ? 'block' : 'none';
+            });
         }
 
-        function showDestinationInput() {
-            document.getElementById('destinationInput').style.display = 'block';
-        }
-
-        function buscarDestino() {
-            const destino = document.getElementById('destinoInput').value;
-            if (destino) {
-                alert(`Buscando ruta hacia: ${destino}`);
-                // Aquí implementarías la lógica para buscar la ruta
-            } else {
-                alert('Por favor, ingresa un destino');
-            }
+        function mostrarDestinoViaje() {
+            const inicioViaje = document.getElementById('inicioViaje');
+            const destinoViaje = document.getElementById('destinoViaje');
+            
+            inicioViaje.style.display = 'none';
+            destinoViaje.style.display = 'block';
         }
     </script>
 </body>
