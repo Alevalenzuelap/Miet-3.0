@@ -19,71 +19,86 @@
         }
         .container {
             background-color: rgba(255,255,255,0.9);
-            border-radius: 10px;
-            padding: 30px;
-            width: 350px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 40px;
+            width: 500px; /* Aumentado el ancho */
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
             text-align: center;
         }
         .location-options {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
         .location-btn {
             width: 100%;
-            padding: 10px;
+            padding: 15px; /* Aumentado el padding */
+            font-size: 18px; /* Texto más grande */
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .location-btn:hover {
             background-color: #218838;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: left;
         }
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 16px; /* Texto más grande */
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
+            padding: 15px; /* Aumentado el padding */
+            font-size: 16px; /* Texto más grande */
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
         }
         .selected-location {
             background-color: #e9ecef;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
             display: none;
+            font-size: 16px; /* Texto más grande */
         }
         .planificar-btn {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 15px;
+            font-size: 18px; /* Texto más grande */
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: background-color 0.3s ease;
             display: none;
         }
         .planificar-btn:hover {
             background-color: #0056b3;
         }
+        /* Títulos más grandes y destacados */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <h1>Planifica Tu Viaje</h1>
+        
         <div class="location-options">
             <button class="location-btn" onclick="mostrarOpcionesInicio()">
                 Elegir Inicio del Viaje
@@ -93,7 +108,7 @@
             </button>
         </div>
 
-        <div id="inicioViaje" style="display:none; margin-top: 15px;">
+        <div id="inicioViaje" style="display:none; margin-top: 25px;">
             <div class="form-group">
                 <label>Selecciona Inicio del Viaje</label>
                 <select id="inicioSelect" class="form-control" onchange="seleccionarInicio()">
@@ -102,7 +117,7 @@
                     <option value="manual">Ingresar Dirección</option>
                 </select>
             </div>
-            <div id="direccionInicio" style="display:none; margin-top: 10px;">
+            <div id="direccionInicio" style="display:none; margin-top: 15px;">
                 <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" class="form-control" onchange="seleccionarInicio()">
             </div>
             <div id="inicioSeleccionado" class="selected-location">
@@ -110,7 +125,7 @@
             </div>
         </div>
 
-        <div id="destinoViaje" style="display:none; margin-top: 15px;">
+        <div id="destinoViaje" style="display:none; margin-top: 25px;">
             <div class="form-group">
                 <label>Ingresa Destino del Viaje</label>
                 <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()">
@@ -126,6 +141,7 @@
     </div>
 
     <script>
+        // El script permanece igual que en la versión anterior
         let inicioSeleccionado = false;
         let destinoSeleccionado = false;
 
