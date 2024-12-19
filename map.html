@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map {
-            height: 100vh;
+            height: 70vh;
             width: 100%;
         }
         .bus-icon {
@@ -17,12 +17,70 @@
             background-position: center;
             cursor: pointer;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            margin: 10% auto;
+            max-width: 80%;
+            max-height: 80%;
+        }
+        .close {
+            color: #f1f1f1;
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div id="map"></div>
+
+    <!-- Modales para imágenes y video -->
+    <div id="imageModal1" class="modal">
+        <span class="close" onclick="closeModal('imageModal1')">&times;</span>
+        <div class="modal-content">
+            <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" style="width:100%">
+        </div>
+    </div>
+
+    <div id="imageModal2" class="modal">
+        <span class="close" onclick="closeModal('imageModal2')">&times;</span>
+        <div class="modal-content">
+            <img src="https://media.istockphoto.com/id/170009755/es/foto/personas-en-el-autob%C3%BAs.jpg?b=1&s=612x612&w=0&k=20&c=dn4LquRdtwn6EOXxjtISetHGQk7yw41u3lfdMLBvp78=" style="width:100%">
+        </div>
+    </div>
+
+    <div id="videoModal" class="modal">
+        <span class="close" onclick="closeModal('videoModal')">&times;</span>
+        <div class="modal-content">
+            <iframe width="100%" height="500" src="https://www.youtube.com/embed/cgs7SlZRKlg?start=75" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
+        // Función para abrir modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        // Función para cerrar modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
         // Inicializar mapa centrado en Concepción
         const map = L.map('map').setView([-36.8282, -73.0514], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -53,9 +111,9 @@
         // Función para crear buses con colores aleatorios
         function createRandomBuses() {
             const buses = [
-                { color: '#FF0000', url: 'https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg' }, // Rojo
-                { color: '#FFD700', url: 'https://media.istockphoto.com/id/170009755/es/foto/personas-en-el-autob%C3%BAs.jpg?b=1&s=612x612&w=0&k=20&c=dn4LquRdtwn6EOXxjtISetHGQk7yw41u3lfdMLBvp78=' }, // Amarillo
-                { color: '#008000', url: 'https://youtu.be/cgs7SlZRKlg?t=75' }  // Verde
+                { color: '#FF0000', modalId: 'imageModal1' }, // Rojo
+                { color: '#FFD700', modalId: 'imageModal2' }, // Amarillo
+                { color: '#008000', modalId: 'videoModal' }  // Verde
             ];
 
             buses.forEach(bus => {
@@ -66,21 +124,11 @@
 
                 L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
-                    .on('click', () => window.location.href = bus.url);
+                    .on('click', () => openModal(bus.modalId));
             });
         }
 
         createRandomBuses();
-
-        // Función para simular movimiento de buses cada 5 segundos
-        setInterval(() => {
-            map.eachLayer((layer) => {
-                if (layer instanceof L.Marker && layer.getIcon().options.className === 'bus-icon') {
-                    map.removeLayer(layer);
-                }
-            });
-            createRandomBuses();
-        }, 5000);
     </script>
 </body>
 </html>
