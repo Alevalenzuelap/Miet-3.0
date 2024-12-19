@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa de Transporte</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        .bus-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .bus-red { background-color: red; }
+        .bus-yellow { background-color: yellow; }
+        .bus-green { background-color: green; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Inicializar mapa centrado en Concepción
+        const map = L.map('map').setView([-36.8282, -73.0514], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Solicitar ubicación actual
+        navigator.geolocation.getCurrentPosition(position => {
+            L.marker([position.coords.latitude, position.coords.longitude])
+                .addTo(map)
+                .bindPopup('Tu ubicación actual');
+        });
+
+        // Función para crear buses con colores aleatorios
+        function createRandomBuses() {
+            const buses = [
+                { color: 'red', url: 'https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg' },
+                { color: 'yellow', url: 'https://media.istockphoto.com/id/170009755/es/foto/personas-en-el-autob%C3%BAs.jpg?b=1&s=612x612&w=0&k=20&c=dn4LquRdtwn6EOXxjtISetHGQk7yw41u3lfdMLBvp78=' },
+                { color: 'green', url: 'https://youtu.be/cgs7SlZRKlg?t=75' }
+            ];
+
+            buses.forEach(bus => {
+                const lat = -36.8282 + (Math.random() - 0.5) * 0.05;
+                const lng = -73.0514 + (Math.random() - 0.5) * 0.05;
+                
+                const busIcon = L.divIcon({
+                    className: `bus-icon bus-${bus.color}`,
+                    html: `<div style="background-color: ${bus.color}; width: 100%; height: 100%;"></div>`
+                });
+
+                L.marker([lat, lng], { icon: busIcon })
+                    .addTo(map)
+                    .on('click', () => window.location.href = bus.url);
+            });
+        }
+
+        createRandomBuses();
+    </script>
+</body>
+</html>
