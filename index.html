@@ -25,38 +25,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .toggle-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .toggle-form button {
-            background: none;
-            border: none;
-            color: #333;
-            margin: 0 10px;
-            cursor: pointer;
-            font-weight: bold;
-            padding-bottom: 5px;
-            border-bottom: 2px solid transparent;
-        }
-        .toggle-form button.active {
-            border-bottom-color: #007bff;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
         .location-options {
             display: flex;
             flex-direction: column;
@@ -71,48 +39,43 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
         .location-btn:hover {
             background-color: #218838;
         }
-        #destinationInput {
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .ir-mapa-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
             margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .ir-mapa-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="toggle-form">
-            <button onclick="showLogin()" class="active" id="loginTab">Iniciar Sesión</button>
-            <button onclick="showRegister()" id="registerTab">Registrarse</button>
-        </div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label>Correo Electrónico</label>
-                <input type="email" placeholder="Ingresa tu correo" disabled>
-            </div>
-            <div class="form-group">
-                <label>Contraseña</label>
-                <input type="password" placeholder="Ingresa tu contraseña" disabled>
-            </div>
-        </form>
-
-        <form id="registerForm" style="display:none;">
-            <div class="form-group">
-                <label>Nombre Completo</label>
-                <input type="text" placeholder="Ingresa tu nombre" disabled>
-            </div>
-            <div class="form-group">
-                <label>Correo Electrónico</label>
-                <input type="email" placeholder="Ingresa tu correo" disabled>
-            </div>
-            <div class="form-group">
-                <label>Contraseña</label>
-                <input type="password" placeholder="Crea tu contraseña" disabled>
-            </div>
-        </form>
-
         <div class="location-options">
             <button class="location-btn" onclick="mostrarOpcionesInicio()">
                 Elegir Inicio del Viaje
@@ -142,23 +105,13 @@
                 <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control">
             </div>
         </div>
+
+        <button class="ir-mapa-btn" onclick="irAlMapa()">
+            Ir al Mapa
+        </button>
     </div>
 
     <script>
-        function showLogin() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginTab').classList.add('active');
-            document.getElementById('registerTab').classList.remove('active');
-        }
-
-        function showRegister() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('registerTab').classList.add('active');
-            document.getElementById('loginTab').classList.remove('active');
-        }
-
         function mostrarOpcionesInicio() {
             const inicioViaje = document.getElementById('inicioViaje');
             const destinoViaje = document.getElementById('destinoViaje');
@@ -179,6 +132,12 @@
             
             inicioViaje.style.display = 'none';
             destinoViaje.style.display = 'block';
+        }
+
+        function irAlMapa() {
+            // Aquí puedes agregar la lógica para redirigir al mapa
+            // Por ejemplo:
+            window.location.href = 'mapa.html';
         }
     </script>
 </body>
