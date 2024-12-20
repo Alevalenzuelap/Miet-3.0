@@ -22,8 +22,13 @@
             border-radius: 15px;
             padding: 40px;
             width: 500px;
-            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
         .location-options {
             display: flex;
@@ -38,13 +43,19 @@
             display: block;
             margin-bottom: 10px;
             font-size: 16px;
+            font-weight: bold;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            border: 1px solid #ddd;
+            border: 1px solid #007bff;
             border-radius: 8px;
+            transition: border 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0056b3;
+            outline: none;
         }
         .selected-location {
             background-color: #e9ecef;
@@ -52,6 +63,7 @@
             margin-top: 15px;
             border-radius: 8px;
             font-size: 16px;
+            border: 1px solid #007bff;
         }
         .planificar-btn {
             background-color: #007bff;
@@ -63,11 +75,12 @@
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s, transform 0.3s;
             display: none;
         }
         .planificar-btn:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
         h1 {
             color: #333;
@@ -75,6 +88,15 @@
             font-size: 24px;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        /* Estilo para el campo de dirección, hacerlo más grande */
+        #inicioManual {
+            height: 50px; /* Aumentar altura */
+            font-size: 18px; /* Aumentar tamaño de texto */
+        }
+        #destinoInput {
+            height: 50px; /* Aumentar altura del campo de destino */
+            font-size: 18px; /* Aumentar tamaño de texto */
         }
     </style>
 </head>
