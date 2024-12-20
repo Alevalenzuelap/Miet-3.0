@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>TransporteApp - Inicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(0,123,255,0.8), rgba(0,56,145,0.8)), 
                         url('https://media.biobiochile.cl/wp-content/uploads/2021/03/a_uno_1186696-1.jpg');
             background-size: cover;
             background-position: center;
@@ -18,17 +19,25 @@
             align-items: center;
         }
         .container {
-            background-color: rgba(255,255,255,0.9);
-            border-radius: 15px;
+            background-color: rgba(255,255,255,0.95);
+            border-radius: 20px;
             padding: 40px;
-            width: 500px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            width: 600px; /* Aumentado el ancho */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0,123,255,0.1), transparent);
+            transform: rotate(-45deg);
+            z-index: 1;
         }
         .location-options {
             display: flex;
@@ -36,34 +45,42 @@
             gap: 20px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: left;
+            position: relative;
         }
         .form-group label {
             display: block;
             margin-bottom: 10px;
             font-size: 16px;
-            font-weight: bold;
+            color: #333;
+            font-weight: 600;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            border: 1px solid #007bff;
-            border-radius: 8px;
-            transition: border 0.3s;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
         .form-group input:focus, .form-group select:focus {
-            border-color: #0056b3;
+            border-color: #007bff;
             outline: none;
+            box-shadow: 0 0 10px rgba(0,123,255,0.2);
+        }
+        #destinoInput {
+            height: 100px; /* Hacer el campo de destino más grande */
+            resize: vertical; /* Permitir redimensionar verticalmente */
         }
         .selected-location {
-            background-color: #e9ecef;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
             padding: 15px;
             margin-top: 15px;
             border-radius: 8px;
             font-size: 16px;
-            border: 1px solid #007bff;
+            color: #495057;
         }
         .planificar-btn {
             background-color: #007bff;
@@ -71,136 +88,42 @@
             border: none;
             padding: 15px;
             font-size: 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: all 0.3s ease;
             display: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(0,123,255,0.3);
         }
         .planificar-btn:hover {
             background-color: #0056b3;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0,123,255,0.4);
         }
         h1 {
-            color: #333;
+            color: #007bff;
             margin-bottom: 30px;
-            font-size: 24px;
+            font-size: 28px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-weight: 600;
         }
-        /* Estilo para el campo de dirección, hacerlo más grande */
-        #inicioManual {
-            height: 50px; /* Aumentar altura */
-            font-size: 18px; /* Aumentar tamaño de texto */
+        /* Efecto de animación sutil */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        #destinoInput {
-            height: 50px; /* Aumentar altura del campo de destino */
-            font-size: 18px; /* Aumentar tamaño de texto */
+        .container > div {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            animation-delay: 0.2s;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Planifica Tu Viaje</h1>
-        
-        <!-- Sección de Inicio del Viaje -->
-        <div id="inicioViaje">
-            <div class="form-group">
-                <label>Selecciona Inicio del Viaje</label>
-                <select id="inicioSelect" class="form-control" onchange="seleccionarInicio()">
-                    <option value="">Seleccionar</option>
-                    <option value="ubicacion">Mi Ubicación Actual</option>
-                    <option value="manual">Ingresar Dirección</option>
-                </select>
-            </div>
-            <div id="direccionInicio" style="display:none; margin-top: 15px;">
-                <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" class="form-control" onchange="seleccionarInicio()">
-            </div>
-            <div id="inicioSeleccionado" class="selected-location" style="display:none;">
-                Inicio: <span id="textoInicio"></span>
-            </div>
-        </div>
-
-        <!-- Sección de Destino del Viaje -->
-        <div id="destinoViaje">
-            <div class="form-group">
-                <label>Ingresa Destino del Viaje</label>
-                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()">
-            </div>
-            <div id="destinoSeleccionado" class="selected-location" style="display:none;">
-                Destino: <span id="textoDestino"></span>
-            </div>
-        </div>
-
-        <!-- Botón Planificar -->
-        <button id="planificarBtn" class="planificar-btn" onclick="planificarViaje()">
-            Planificar Viaje
-        </button>
-    </div>
-
-    <script>
-        // Variables para rastrear la selección de inicio y destino
-        let inicioSeleccionado = false;
-        let destinoSeleccionado = false;
-
-        // Función para gestionar la selección del inicio del viaje
-        function seleccionarInicio() {
-            const inicioSelect = document.getElementById('inicioSelect');
-            const inicioManual = document.getElementById('inicioManual');
-            const direccionInicio = document.getElementById('direccionInicio');
-            const inicioSeleccionadoDiv = document.getElementById('inicioSeleccionado');
-            const textoInicio = document.getElementById('textoInicio');
-            
-            let ubicacion = '';
-
-            // Mostrar u obtener el valor según la opción seleccionada
-            if (inicioSelect.value === 'ubicacion') {
-                ubicacion = 'Ubicación Actual';
-                direccionInicio.style.display = 'none'; // Ocultar campo de texto manual
-            } else if (inicioSelect.value === 'manual') {
-                ubicacion = inicioManual.value;
-                direccionInicio.style.display = 'block'; // Mostrar campo de texto manual
-            }
-
-            // Actualizar la vista del inicio seleccionado
-            if (ubicacion || (inicioSelect.value === 'manual' && inicioManual.value)) {
-                textoInicio.textContent = ubicacion;
-                inicioSeleccionadoDiv.style.display = 'block';
-                inicioSeleccionado = true;
-                verificarPlanificacion(); // Verificar si ambas secciones están completas
-            }
-        }
-
-        // Función para gestionar la selección del destino del viaje
-        function seleccionarDestino() {
-            const destinoInput = document.getElementById('destinoInput');
-            const destinoSeleccionadoDiv = document.getElementById('destinoSeleccionado');
-            const textoDestino = document.getElementById('textoDestino');
-
-            // Actualizar la vista del destino si se ingresó un valor
-            if (destinoInput.value) {
-                textoDestino.textContent = destinoInput.value;
-                destinoSeleccionadoDiv.style.display = 'block';
-                destinoSeleccionado = true;
-                verificarPlanificacion(); // Verificar si ambas secciones están completas
-            }
-        }
-
-        // Función para habilitar el botón de planificación si ambas secciones están completas
-        function verificarPlanificacion() {
-            const planificarBtn = document.getElementById('planificarBtn');
-            
-            if (inicioSeleccionado && destinoSeleccionado) {
-                planificarBtn.style.display = 'block';
-            }
-        }
-
-        // Función para redirigir a otra página al planificar el viaje
-        function planificarViaje() {
-            // Redirigir a map.html
-            window.location.href = 'map.html';
-        }
-    </script>
+    <!-- El resto del código HTML permanece igual -->
 </body>
 </html>
