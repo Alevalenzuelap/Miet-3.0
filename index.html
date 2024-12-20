@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>TransporteApp - Inicio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'Montserrat', Arial, sans-serif;
-            background: linear-gradient(135deg, rgba(0,123,255,0.8), rgba(0,56,145,0.8)), 
+            font-family: Arial, sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('https://media.biobiochile.cl/wp-content/uploads/2021/03/a_uno_1186696-1.jpg');
             background-size: cover;
             background-position: center;
@@ -19,25 +18,12 @@
             align-items: center;
         }
         .container {
-            background-color: rgba(255,255,255,0.95);
-            border-radius: 20px;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 15px;
             padding: 40px;
-            width: 600px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            width: 500px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0,123,255,0.1), transparent);
-            transform: rotate(-45deg);
-            z-index: 1;
         }
         .location-options {
             display: flex;
@@ -45,42 +31,27 @@
             gap: 20px;
         }
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: left;
-            position: relative;
         }
         .form-group label {
             display: block;
             margin-bottom: 10px;
             font-size: 16px;
-            color: #333;
-            font-weight: 600;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 10px rgba(0,123,255,0.2);
-        }
-        #destinoInput {
-            height: 100px;
-            resize: vertical;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
         .selected-location {
-            background-color: #f8f9fa;
-            border-left: 4px solid #007bff;
+            background-color: #e9ecef;
             padding: 15px;
             margin-top: 15px;
             border-radius: 8px;
             font-size: 16px;
-            color: #495057;
         }
         .planificar-btn {
             background-color: #007bff;
@@ -88,37 +59,31 @@
             border: none;
             padding: 15px;
             font-size: 18px;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease;
             display: none;
-            font-weight: 600;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 20px rgba(0,123,255,0.3);
         }
         .planificar-btn:hover {
             background-color: #0056b3;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(0,123,255,0.4);
         }
         h1 {
-            color: #007bff;
+            color: #333;
             margin-bottom: 30px;
-            font-size: 28px;
+            font-size: 24px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
+            letter-spacing: 1px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Aumentar la altura del campo para ingresar manualmente la dirección de inicio */
+        #inicioManual {
+            height: 60px; /* Aumentar altura */
+            font-size: 18px; /* Aumentar tamaño de texto */
         }
-        .container > div {
-            animation: fadeIn 0.5s ease forwards;
-            opacity: 0;
-            animation-delay: 0.2s;
+        #destinoInput {
+            height: 50px; /* Mantener la altura original */
+            font-size: 16px; /* Mantener el tamaño original de texto */
         }
     </style>
 </head>
@@ -148,7 +113,7 @@
         <div id="destinoViaje">
             <div class="form-group">
                 <label>Ingresa Destino del Viaje</label>
-                <textarea id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()"></textarea>
+                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()">
             </div>
             <div id="destinoSeleccionado" class="selected-location" style="display:none;">
                 Destino: <span id="textoDestino"></span>
