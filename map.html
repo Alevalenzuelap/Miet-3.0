@@ -42,6 +42,14 @@
             font-weight: bold;
             cursor: pointer;
         }
+        /* Nueva clase para los nombres de las líneas de bus */
+        .bus-label {
+            background-color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -51,28 +59,28 @@
     <div id="imageModal1" class="modal">
         <span class="close" onclick="closeModal('imageModal1')">&times;</span>
         <div class="modal-content">
-                  <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
-            </div>
+            <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
+        </div>
     </div>
 
     <div id="imageModal2" class="modal">
         <span class="close" onclick="closeModal('imageModal2')">&times;</span>
         <div class="modal-content">
             <img src="https://raw.githubusercontent.com/Alevalenzuelap/Miet-3.0/refs/heads/main/Assets/images/Bus%20vacio.jpeg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
-             </div>
+        </div>
     </div>
 
     <div id="videoModal" class="modal">
         <span class="close" onclick="closeModal('videoModal')">&times;</span>
         <div class="modal-content">
             <iframe 
-    width="100%" 
-    height="500" 
-    src="https://www.youtube.com/embed/cgs7SlZRKlg?start=1&autoplay=1&mute=1" 
-    frameborder="0" 
-    allowfullscreen
-    allow="autoplay"
-></iframe>
+                width="100%" 
+                height="500" 
+                src="https://www.youtube.com/embed/cgs7SlZRKlg?start=1&autoplay=1&mute=1" 
+                frameborder="0" 
+                allowfullscreen
+                allow="autoplay">
+            </iframe>
         </div>
     </div>
 
@@ -115,23 +123,34 @@
             });
         }
 
-        // Función para crear buses con colores aleatorios
+        // Función para crear buses con colores aleatorios y agregar etiquetas
         function createRandomBuses() {
             const buses = [
-                { color: '#FF0000', modalId: 'imageModal1' }, // Rojo
-                { color: '#FFD700', modalId: 'imageModal2' }, // Amarillo
-                { color: '#008000', modalId: 'videoModal' }  // Verde
+                { color: '#FF0000', label: 'Línea 70', modalId: 'imageModal1' }, // Rojo
+                { color: '#FFD700', label: 'Línea 41', modalId: 'imageModal2' }, // Amarillo
+                { color: '#008000', label: 'Línea 56', modalId: 'videoModal' }  // Verde
             ];
 
             buses.forEach(bus => {
                 const lat = -36.8282 + (Math.random() - 0.5) * 0.05;
                 const lng = -73.0514 + (Math.random() - 0.5) * 0.05;
-                
+
                 const busIcon = createBusIcon(bus.color);
 
-                L.marker([lat, lng], { icon: busIcon })
+                // Crear el marcador e incluir el nombre de la línea
+                const busMarker = L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
                     .on('click', () => openModal(bus.modalId));
+
+                // Crear una etiqueta para el nombre del bus
+                const label = L.divIcon({
+                    className: 'bus-label',
+                    html: bus.label,
+                    iconSize: [50, 20] // Ajustar el tamaño según sea necesario
+                });
+
+                // Añadir la etiqueta de la línea de bus
+                L.marker([lat, lng], { icon: label }).addTo(map);
             });
         }
 
