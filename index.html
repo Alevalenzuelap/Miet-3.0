@@ -45,6 +45,7 @@
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 8px;
+            height: 60px; /* Mantener la misma altura para ambos campos */
         }
         .selected-location {
             background-color: #e9ecef;
@@ -76,14 +77,10 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* Aumentar la altura del campo para ingresar manualmente la dirección de inicio */
-        #inicioManual {
-            height: 60px; /* Aumentar altura */
-            font-size: 18px; /* Aumentar tamaño de texto */
-        }
-        #destinoInput {
-            height: 50px; /* Mantener la altura original */
-            font-size: 16px; /* Mantener el tamaño original de texto */
+        /* Aumentar la altura de ambos campos de entrada */
+        #inicioManual, #destinoInput {
+            height: 60px; /* Aumentar altura para ambos campos */
+            font-size: 18px; /* Mantener tamaño de texto */
         }
     </style>
 </head>
