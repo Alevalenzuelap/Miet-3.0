@@ -26,27 +26,25 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0,0,0,0.9);
         }
         .modal-content {
-            position: relative;
-            background-color: #fefefe;
             margin: 10% auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 80%; 
+            max-width: 80%;
+            max-height: 80%;
         }
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
+            color: #f1f1f1;
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            font-size: 40px;
             font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
             cursor: pointer;
+        }
+        .leaflet-popup-content {
+            text-align: center;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
@@ -55,71 +53,112 @@
 
     <!-- Modales para imágenes y video -->
     <div id="imageModal1" class="modal">
+        <span class="close" onclick="closeModal('imageModal1')">&times;</span>
         <div class="modal-content">
-            <span class="close" onclick="closeModal('imageModal1')">&times;</span>
             <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
         </div>
     </div>
 
     <div id="imageModal2" class="modal">
+        <span class="close" onclick="closeModal('imageModal2')">&times;</span>
         <div class="modal-content">
-            <span class="close" onclick="closeModal('imageModal2')">&times;</span>
             <img src="https://raw.githubusercontent.com/Alevalenzuelap/Miet-3.0/refs/heads/main/Assets/images/Bus%20vacio.jpeg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
         </div>
     </div>
 
     <div id="videoModal" class="modal">
+        <span class="close" onclick="closeModal('videoModal')">&times;</span>
         <div class="modal-content">
-            <span class="close" onclick="closeModal('videoModal')">&times;</span>
-            <iframe width="100%" height="500" src="https://www.youtube.com/embed/cgs7SlZRKlg?start=1&autoplay=1&mute=1" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+            <iframe 
+                width="100%" 
+                height="500" 
+                src="https://www.youtube.com/embed/cgs7SlZRKlg?start=1&autoplay=1&mute=1" 
+                frameborder="0" 
+                allowfullscreen
+                allow="autoplay"
+            ></iframe>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
+        // Función para abrir modal
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "block";
         }
 
+        // Función para cerrar modal
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
         }
 
+        // Inicializar mapa centrado en Concepción
         const map = L.map('map').setView([-36.8282, -73.0514], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+        // Solicitar ubicación actual
         navigator.geolocation.getCurrentPosition(position => {
-            L.marker([position.coords.latitude, position.coords.longitude], { title: "Tu ubicación actual" }).addTo(map).bindPopup("Tu ubicación actual");
+            L.marker([position.coords.latitude, position.coords.longitude])
+                .addTo(map)
+                .bindPopup('Tu ubicación actual');
         });
 
+        // Función para crear un ícono de bus con color específico
         function createBusIcon(color) {
-            const svg = `...`; // El SVG completo va aquí
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="40" height="40">
+                    <path fill="${color}" stroke="black" stroke-width="15" d="M488 128h-8V80c0-44.8-99.2-80-224-80S32 35.2 32 80v48h-8c-13.25 0-24 10.74-24 24v80c0 13.25 10.75 24 24 24h8v160c0 17.67 14.33 32 32 32v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h192v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h6.4c16 0 25.6-12.8 25.6-25.6V256h8c13.25 0 24-10.75 24-24v-80c0-13.26-10.75-24-24-24zM160 72c0-4.42 3.58-8 8-8h176c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H168c-4.42 0-8-3.58-8-8V72zm-48 328c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm128-112H128c-17.67 0-32-14.33-32-32v-96c0-17.67 14.33-32 32-32h112v160zm32 0V128h112c17.67 0 32 14.33 32 32v96c0 17.67-14.33 32-32 32H272zm128 112c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"/>
+                </svg>
+            `;
             return L.divIcon({
                 className: 'bus-icon',
-                html: `<div style="width: 40px; height: 40px;">${svg}</div>`,
+                html: `<div style="width: 40px; height: 40px;">
+                        ${svg}
+                      </div>`,
                 iconSize: [40, 40]
             });
         }
 
+        // Función para crear buses con colores aleatorios y popups
         function createRandomBuses() {
             const buses = [
-                { color: '#FF0000', name: 'Línea 70', modalId: 'imageModal1' },
-                { color: '#FFD700', name: 'Línea 71', modalId: 'imageModal2' },
-                { color: '#008000', name: 'Línea 56', modalId: 'videoModal' }
+                { 
+                    color: '#FF0000', 
+                    modalId: 'imageModal1', 
+                    name: 'Línea 70',
+                    time: Math.floor(Math.random() * 11) // Tiempo aleatorio entre 0 y 10 minutos
+                },
+                { 
+                    color: '#FFD700', 
+                    modalId: 'imageModal2', 
+                    name: 'Línea 71',
+                    time: Math.floor(Math.random() * 11)
+                },
+                { 
+                    color: '#008000', 
+                    modalId: 'videoModal', 
+                    name: 'Línea 56',
+                    time: Math.floor(Math.random() * 11)
+                }
             ];
 
             buses.forEach(bus => {
                 const lat = -36.8282 + (Math.random() - 0.5) * 0.05;
                 const lng = -73.0514 + (Math.random() - 0.5) * 0.05;
-                const timeToArrival = Math.floor(Math.random() * 10 + 1); // Tiempo en minutos
+                
                 const busIcon = createBusIcon(bus.color);
 
-                L.marker([lat, lng], { icon: busIcon })
+                const marker = L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
-                    .bindPopup(`<strong>${bus.name}</strong><br>Tiempo estimado de llegada: ${timeToArrival} minutos`)
-                    .on('click', function() {
+                    .bindPopup(`
+                        <b style="font-size: 16px; color: ${bus.color};">${bus.name}</b><br>
+                        Tiempo estimado de llegada: <b>${bus.time} minutos</b>
+                    `, {
+                        maxWidth: 250,
+                        className: 'custom-popup'
+                    })
+                    .on('click', () => {
+                        marker.openPopup(); // Asegura que el popup se abra al hacer clic
                         openModal(bus.modalId);
                     });
             });
