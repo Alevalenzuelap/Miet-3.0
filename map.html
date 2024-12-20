@@ -17,6 +17,16 @@
             background-position: center;
             cursor: pointer;
         }
+        .bus-label {
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            padding: 2px 5px;
+            font-size: 12px;
+            pointer-events: none;
+            white-space: nowrap;
+            transform: translate(-50%, -50%);
+        }
         .modal {
             display: none;
             position: fixed;
@@ -32,6 +42,13 @@
             margin: 10% auto;
             max-width: 80%;
             max-height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content img, .modal-content iframe {
+            max-width: 100%;
+            max-height: 100%;
         }
         .close {
             color: #f1f1f1;
@@ -51,15 +68,15 @@
     <div id="imageModal1" class="modal">
         <span class="close" onclick="closeModal('imageModal1')">&times;</span>
         <div class="modal-content">
-                  <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
-            </div>
+            <img src="https://www.shutterstock.com/image-photo/sao-paulo-sp-brazil-february-600nw-1142322602.jpg" alt="Imagen 1">
+        </div>
     </div>
 
     <div id="imageModal2" class="modal">
         <span class="close" onclick="closeModal('imageModal2')">&times;</span>
         <div class="modal-content">
-            <img src="https://raw.githubusercontent.com/Alevalenzuelap/Miet-3.0/refs/heads/main/Assets/images/Bus%20vacio.jpeg" style="width:100%; height:500px; object-fit: contain; object-position: center;">
-             </div>
+            <img src="https://raw.githubusercontent.com/Alevalenzuelap/Miet-3.0/refs/heads/main/Assets/images/Bus%20vacio.jpeg" alt="Imagen 2">
+        </div>
     </div>
 
     <div id="videoModal" class="modal">
@@ -103,7 +120,7 @@
         function createBusIcon(color) {
             const svg = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="40" height="40">
-                    <path fill="${color}" stroke="black" stroke-width="15" d="M488 128h-8V80c0-44.8-99.2-80-224-80S32 35.2 32 80v48h-8c-13.25 0-24 10.74-24 24v80c0 13.25 10.75 24 24 24h8v160c0 17.67 14.33 32 32 32v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h192v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h6.4c16 0 25.6-12.8 25.6-25.6V256h8c13.25 0 24-10.75 24-24v-80c0-13.26-10.75-24-24-24zM160 72c0-4.42 3.58-8 8-8h176c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H168c-4.42 0-8-3.58-8-8V72zm-48 328c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm128-112H128c-17.67 0-32-14.33-32-32v-96c0-17.67 14.33-32 32-32h112v160zm32 0V128h112c17.67 0 32 14.33 32 32v96c0 17.67-14.33 32-32 32H272zm128 112c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"/>
+                    <path fill="${color}" stroke="black" stroke-width="15" d="M488 128h-8V80c0-44.8-99.2-80-224-80S32 35.2 32 80v48h-8c-13.25 0-24 10.74-24 24v80c0 13.25 10.75 24 24 24h8v160c0 17[...]
                 </svg>
             `;
             return L.divIcon({
@@ -118,9 +135,9 @@
         // Función para crear buses con colores aleatorios
         function createRandomBuses() {
             const buses = [
-                { color: '#FF0000', modalId: 'imageModal1' }, // Rojo
-                { color: '#FFD700', modalId: 'imageModal2' }, // Amarillo
-                { color: '#008000', modalId: 'videoModal' }  // Verde
+                { color: '#FF0000', modalId: 'imageModal1', name: 'LINEA 24' }, // Rojo
+                { color: '#FFD700', modalId: 'imageModal2', name: 'LINEA 40' }, // Amarillo
+                { color: '#008000', modalId: 'videoModal', name: 'LINEA 70' }  // Verde
             ];
 
             buses.forEach(bus => {
@@ -129,9 +146,17 @@
                 
                 const busIcon = createBusIcon(bus.color);
 
-                L.marker([lat, lng], { icon: busIcon })
+                const marker = L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
                     .on('click', () => openModal(bus.modalId));
+
+                const label = L.divIcon({
+                    className: 'bus-label',
+                    html: bus.name
+                });
+
+                L.marker([lat, lng], { icon: label })
+                    .addTo(map);
             });
         }
 
