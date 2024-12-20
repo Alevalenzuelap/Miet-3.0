@@ -32,18 +32,7 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0,123,255,0.1), transparent);
-            transform: rotate(-45deg);
-            z-index: 1;
+            z-index: 10; /* Asegura que los elementos sean interactuables */
         }
         .form-group {
             margin-bottom: 25px;
@@ -104,6 +93,7 @@
         .planificar-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 25px rgba(0,123,255,0.4);
+            background: linear-gradient(135deg, #0056b3, #003d82);
         }
         h1 {
             color: var(--primary-color);
@@ -169,7 +159,6 @@
     </div>
 
     <script>
-        // [El script permanece igual al código original]
         // Variables para rastrear la selección de inicio y destino
         let inicioSeleccionado = false;
         let destinoSeleccionado = false;
