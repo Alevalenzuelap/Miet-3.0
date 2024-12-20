@@ -22,7 +22,7 @@
             background-color: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
-            width: 600px; /* Aumentado el ancho */
+            width: 600px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             text-align: center;
             position: relative;
@@ -70,8 +70,8 @@
             box-shadow: 0 0 10px rgba(0,123,255,0.2);
         }
         #destinoInput {
-            height: 100px; /* Hacer el campo de destino más grande */
-            resize: vertical; /* Permitir redimensionar verticalmente */
+            height: 100px;
+            resize: vertical;
         }
         .selected-location {
             background-color: #f8f9fa;
@@ -111,7 +111,6 @@
             letter-spacing: 2px;
             font-weight: 600;
         }
-        /* Efecto de animación sutil */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -124,6 +123,106 @@
     </style>
 </head>
 <body>
-    <!-- El resto del código HTML permanece igual -->
+    <div class="container">
+        <h1>Planifica Tu Viaje</h1>
+        
+        <!-- Sección de Inicio del Viaje -->
+        <div id="inicioViaje">
+            <div class="form-group">
+                <label>Selecciona Inicio del Viaje</label>
+                <select id="inicioSelect" class="form-control" onchange="seleccionarInicio()">
+                    <option value="">Seleccionar</option>
+                    <option value="ubicacion">Mi Ubicación Actual</option>
+                    <option value="manual">Ingresar Dirección</option>
+                </select>
+            </div>
+            <div id="direccionInicio" style="display:none; margin-top: 15px;">
+                <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" class="form-control" onchange="seleccionarInicio()">
+            </div>
+            <div id="inicioSeleccionado" class="selected-location" style="display:none;">
+                Inicio: <span id="textoInicio"></span>
+            </div>
+        </div>
+
+        <!-- Sección de Destino del Viaje -->
+        <div id="destinoViaje">
+            <div class="form-group">
+                <label>Ingresa Destino del Viaje</label>
+                <textarea id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()"></textarea>
+            </div>
+            <div id="destinoSeleccionado" class="selected-location" style="display:none;">
+                Destino: <span id="textoDestino"></span>
+            </div>
+        </div>
+
+        <!-- Botón Planificar -->
+        <button id="planificarBtn" class="planificar-btn" onclick="planificarViaje()">
+            Planificar Viaje
+        </button>
+    </div>
+
+    <script>
+        // Variables para rastrear la selección de inicio y destino
+        let inicioSeleccionado = false;
+        let destinoSeleccionado = false;
+
+        // Función para gestionar la selección del inicio del viaje
+        function seleccionarInicio() {
+            const inicioSelect = document.getElementById('inicioSelect');
+            const inicioManual = document.getElementById('inicioManual');
+            const direccionInicio = document.getElementById('direccionInicio');
+            const inicioSeleccionadoDiv = document.getElementById('inicioSeleccionado');
+            const textoInicio = document.getElementById('textoInicio');
+            
+            let ubicacion = '';
+
+            // Mostrar u obtener el valor según la opción seleccionada
+            if (inicioSelect.value === 'ubicacion') {
+                ubicacion = 'Ubicación Actual';
+                direccionInicio.style.display = 'none'; // Ocultar campo de texto manual
+            } else if (inicioSelect.value === 'manual') {
+                ubicacion = inicioManual.value;
+                direccionInicio.style.display = 'block'; // Mostrar campo de texto manual
+            }
+
+            // Actualizar la vista del inicio seleccionado
+            if (ubicacion || (inicioSelect.value === 'manual' && inicioManual.value)) {
+                textoInicio.textContent = ubicacion;
+                inicioSeleccionadoDiv.style.display = 'block';
+                inicioSeleccionado = true;
+                verificarPlanificacion(); // Verificar si ambas secciones están completas
+            }
+        }
+
+        // Función para gestionar la selección del destino del viaje
+        function seleccionarDestino() {
+            const destinoInput = document.getElementById('destinoInput');
+            const destinoSeleccionadoDiv = document.getElementById('destinoSeleccionado');
+            const textoDestino = document.getElementById('textoDestino');
+
+            // Actualizar la vista del destino si se ingresó un valor
+            if (destinoInput.value) {
+                textoDestino.textContent = destinoInput.value;
+                destinoSeleccionadoDiv.style.display = 'block';
+                destinoSeleccionado = true;
+                verificarPlanificacion(); // Verificar si ambas secciones están completas
+            }
+        }
+
+        // Función para habilitar el botón de planificación si ambas secciones están completas
+        function verificarPlanificacion() {
+            const planificarBtn = document.getElementById('planificarBtn');
+            
+            if (inicioSeleccionado && destinoSeleccionado) {
+                planificarBtn.style.display = 'block';
+            }
+        }
+
+        // Función para redirigir a otra página al planificar el viaje
+        function planificarViaje() {
+            // Redirigir a map.html
+            window.location.href = 'map.html';
+        }
+    </script>
 </body>
 </html>
