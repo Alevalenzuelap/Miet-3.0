@@ -45,7 +45,6 @@
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            height: 60px; /* Mantener la misma altura para ambos campos */
         }
         .selected-location {
             background-color: #e9ecef;
@@ -77,10 +76,10 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* Aumentar la altura de ambos campos de entrada */
+        /* Ajustar ambos campos para que tengan la misma altura y estilo */
         #inicioManual, #destinoInput {
-            height: 60px; /* Aumentar altura para ambos campos */
-            font-size: 18px; /* Mantener tamaño de texto */
+            height: 60px; /* Establecer altura */
+            font-size: 18px; /* Establecer tamaño de texto */
         }
     </style>
 </head>
@@ -135,7 +134,7 @@
             const direccionInicio = document.getElementById('direccionInicio');
             const inicioSeleccionadoDiv = document.getElementById('inicioSeleccionado');
             const textoInicio = document.getElementById('textoInicio');
-            
+
             let ubicacion = '';
 
             // Mostrar u obtener el valor según la opción seleccionada
@@ -174,7 +173,7 @@
         // Función para habilitar el botón de planificación si ambas secciones están completas
         function verificarPlanificacion() {
             const planificarBtn = document.getElementById('planificarBtn');
-            
+
             if (inicioSeleccionado && destinoSeleccionado) {
                 planificarBtn.style.display = 'block';
             }
