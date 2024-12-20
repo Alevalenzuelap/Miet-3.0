@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>TransporteApp - Inicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-gradient: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://media.biobiochile.cl/wp-content/uploads/2021/03/a_uno_1186696-1.jpg');
             background-size: cover;
             background-position: center;
@@ -19,74 +26,106 @@
         }
         .container {
             background-color: rgba(255,255,255,0.95);
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 40px;
-            width: 400px; /* Reducido para una apariencia más compacta */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            width: 500px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0,123,255,0.1), transparent);
+            transform: rotate(-45deg);
+            z-index: 1;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: left;
+            position: relative;
         }
         .form-group label {
             display: block;
             margin-bottom: 10px;
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-        .form-group input, .form-group select {
+        .form-group input, 
+        .form-group select {
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            border: 2px solid #007bff;
-            border-radius: 8px;
-            transition: border-color 0.3s;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            height: 55px; /* Altura uniforme */
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #0056b3;
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 10px rgba(0,123,255,0.2);
         }
         .selected-location {
-            background-color: #e9ecef;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
             padding: 15px;
             margin-top: 15px;
             border-radius: 8px;
             font-size: 16px;
+            color: #495057;
+            transition: background-color 0.3s ease;
         }
         .planificar-btn {
-            background-color: #007bff;
+            background: var(--background-gradient);
             color: white;
             border: none;
             padding: 15px;
             font-size: 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: all 0.3s ease;
             display: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(0,123,255,0.3);
         }
         .planificar-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0,123,255,0.4);
         }
         h1 {
-            color: #333;
+            color: var(--primary-color);
             margin-bottom: 30px;
-            font-size: 24px;
+            font-size: 28px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-weight: 600;
         }
-        /* Estilos para ambos campos de entrada */
-        #inicioManual, #destinoInput {
-            height: 60px; /* Mantener altura igual en ambos campos */
-            font-size: 18px; /* Tamaño de texto consistente */
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container > div {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            animation-delay: 0.2s;
+        }
+        /* Efecto hover en secciones */
+        .form-group:hover label {
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -98,14 +137,14 @@
         <div id="inicioViaje">
             <div class="form-group">
                 <label>Selecciona Inicio del Viaje</label>
-                <select id="inicioSelect" class="form-control" onchange="seleccionarInicio()">
+                <select id="inicioSelect" onchange="seleccionarInicio()">
                     <option value="">Seleccionar</option>
                     <option value="ubicacion">Mi Ubicación Actual</option>
                     <option value="manual">Ingresar Dirección</option>
                 </select>
             </div>
             <div id="direccionInicio" style="display:none; margin-top: 15px;">
-                <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" class="form-control" onchange="seleccionarInicio()">
+                <input type="text" id="inicioManual" placeholder="Ingresa dirección de inicio" onchange="seleccionarInicio()">
             </div>
             <div id="inicioSeleccionado" class="selected-location" style="display:none;">
                 Inicio: <span id="textoInicio"></span>
@@ -116,7 +155,7 @@
         <div id="destinoViaje">
             <div class="form-group">
                 <label>Ingresa Destino del Viaje</label>
-                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." class="form-control" onchange="seleccionarDestino()">
+                <input type="text" id="destinoInput" placeholder="Ej: Terminal de Buses, Universidad..." onchange="seleccionarDestino()">
             </div>
             <div id="destinoSeleccionado" class="selected-location" style="display:none;">
                 Destino: <span id="textoDestino"></span>
@@ -130,6 +169,7 @@
     </div>
 
     <script>
+        // [El script permanece igual al código original]
         // Variables para rastrear la selección de inicio y destino
         let inicioSeleccionado = false;
         let destinoSeleccionado = false;
