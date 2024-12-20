@@ -9,7 +9,7 @@
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
                         url('https://media.biobiochile.cl/wp-content/uploads/2021/03/a_uno_1186696-1.jpg');
             background-size: cover;
             background-position: center;
@@ -18,17 +18,17 @@
             align-items: center;
         }
         .container {
-            background-color: rgba(255,255,255,0.9);
+            background-color: rgba(255,255,255,0.95);
             border-radius: 15px;
             padding: 40px;
-            width: 500px;
-            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            width: 400px; /* Reducido para una apariencia más compacta */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .location-options {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
         }
         .form-group {
             margin-bottom: 20px;
@@ -37,14 +37,20 @@
         .form-group label {
             display: block;
             margin-bottom: 10px;
-            font-size: 16px;
+            font-size: 18px;
+            color: #333;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            border: 1px solid #ddd;
+            border: 2px solid #007bff;
             border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0056b3;
+            outline: none;
         }
         .selected-location {
             background-color: #e9ecef;
@@ -63,11 +69,12 @@
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s, transform 0.3s;
             display: none;
         }
         .planificar-btn:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
         h1 {
             color: #333;
@@ -76,10 +83,10 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* Ajustar ambos campos para que tengan la misma altura y estilo */
+        /* Estilos para ambos campos de entrada */
         #inicioManual, #destinoInput {
-            height: 60px; /* Establecer altura */
-            font-size: 18px; /* Establecer tamaño de texto */
+            height: 60px; /* Mantener altura igual en ambos campos */
+            font-size: 18px; /* Tamaño de texto consistente */
         }
     </style>
 </head>
@@ -134,7 +141,7 @@
             const direccionInicio = document.getElementById('direccionInicio');
             const inicioSeleccionadoDiv = document.getElementById('inicioSeleccionado');
             const textoInicio = document.getElementById('textoInicio');
-
+            
             let ubicacion = '';
 
             // Mostrar u obtener el valor según la opción seleccionada
@@ -173,7 +180,7 @@
         // Función para habilitar el botón de planificación si ambas secciones están completas
         function verificarPlanificacion() {
             const planificarBtn = document.getElementById('planificarBtn');
-
+            
             if (inicioSeleccionado && destinoSeleccionado) {
                 planificarBtn.style.display = 'block';
             }
