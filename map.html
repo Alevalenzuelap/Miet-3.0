@@ -49,6 +49,8 @@
             border-radius: 3px;
             font-size: 12px;
             text-align: center;
+            position: relative; /* Cambiar a relative */
+            top: -10px; /* Ajustar la posición vertical */
         }
     </style>
 </head>
@@ -137,20 +139,20 @@
 
                 const busIcon = createBusIcon(bus.color);
 
-                // Crear el marcador e incluir el nombre de la línea
-                const busMarker = L.marker([lat, lng], { icon: busIcon })
+                // Crear el marcador del bus
+                L.marker([lat, lng], { icon: busIcon })
                     .addTo(map)
                     .on('click', () => openModal(bus.modalId));
 
-                // Crear una etiqueta para el nombre del bus
-                const label = L.divIcon({
+                // Añadir la etiqueta de la línea de bus arriba del ícono
+                L.divIcon({
                     className: 'bus-label',
                     html: bus.label,
-                    iconSize: [50, 20] // Ajustar el tamaño según sea necesario
+                    iconSize: [70, 20]
                 });
 
-                // Añadir la etiqueta de la línea de bus
-                L.marker([lat, lng], { icon: label }).addTo(map);
+                // Crear un marcador para la etiqueta y ajustarlo ligeramente hacia arriba
+                L.marker([lat, lng + 0.002], { icon: L.divIcon({ className: 'bus-label', html: bus.label, iconSize: [70, 20] }) }).addTo(map);
             });
         }
 
